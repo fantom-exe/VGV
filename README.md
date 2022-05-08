@@ -1,5 +1,5 @@
 # VGV
-VGV is an app that allows users to browse video games from the [RAWG Video Games Database API](https://rawg.io/apidocs).
+VGV is an Android app that allows users to browse video games from the [RAWG Video Games Database API](https://rawg.io/apidocs).
 
 
 ## Open-source libraries used
