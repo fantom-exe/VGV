@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".DetailActivity">
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/player"
@@ -17,7 +16,10 @@
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textAlignment="center"
+        android:textColor="#B71C1C"
+        android:textSize="40sp"
+        android:textStyle="bold"
         tools:text="The Little Things" />
 
     <RatingBar
@@ -25,13 +27,31 @@
         style="@style/Widget.AppCompat.RatingBar.Indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="20dp"
+        android:indeterminate="false"
         android:isIndicator="true"
+        android:max="10"
         android:numStars="10"
-        android:rating="8.5" />
+        android:rating="6"
+        android:stepSize="1" />
 
     <TextView
         android:id="@+id/tvOverview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="30dp"
+        android:textSize="18sp"
         tools:text="Deputy Sheriff Joe \&quot;Deke\&quot; Deacon joins forces with Sgt. Jim Baxter to search for a serial killer who's terrorizing Los Angeles. As they track the culprit, Baxter is unaware that the investigation is dredging up echoes of Deke's past, uncovering disturbing secrets that could threaten more than his case." />
+
+    <TextView
+        android:id="@+id/tvWiki"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="18sp" />
 </LinearLayout>
