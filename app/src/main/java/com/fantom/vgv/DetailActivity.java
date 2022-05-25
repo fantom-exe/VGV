@@ -1,6 +1,5 @@
 package com.fantom.vgv;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
