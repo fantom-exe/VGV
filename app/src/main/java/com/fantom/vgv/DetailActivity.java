@@ -3,11 +3,14 @@ package com.fantom.vgv;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -21,15 +24,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 import okhttp3.Headers;
 
@@ -60,13 +61,20 @@ public class DetailActivity extends YouTubeBaseActivity {
         tvOverview.setText(game.getOverview());
         ratingBar.setRating((float) game.getRating());
 
+        // create microservice text files
         try {
-            writeToFile(game.getTitle());
+            createMicroserviceFiles();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        tvWiki.setText(String.format("Wikipedia page: %s", game.getTitle()));
+        // write to microservice input text file
+        try {
+            microserviceInput(game.getTitle());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Write to in-pipe.txt failed", Toast.LENGTH_SHORT).show();
+        }
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(String.format(VIDEOS_URL, game.getGameId()), new JsonHttpResponseHandler() {
@@ -91,6 +99,14 @@ public class DetailActivity extends YouTubeBaseActivity {
             }
         });
 
+        // read from microservice output text file
+        try {
+            String wiki = microserviceOutput();
+            tvWiki.setText(String.format("Wikipedia page: %s", wiki));
+        } catch (IOException e) {
+            e.printStackTrace();
+            tvWiki.setText(String.format("Wikipedia page: %s", "Not found!"));
+        }
     }
 
     private void initalizeYoutube(final String youtubekey) {
@@ -108,17 +124,39 @@ public class DetailActivity extends YouTubeBaseActivity {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void writeToFile(String title) throws IOException {
-//        RandomAccessFile writer = new RandomAccessFile("./wiki_image/in-pipe.txt", "rw");
-//        writer.writeUTF(title);
-//        writer.close();
+    private void createMicroserviceFiles() throws IOException {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(DetailActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Toast.makeText(DetailActivity.this, "Write External Storage permission allows us to create files. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(DetailActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+        }
 
-        Context context = getApplicationContext();
-        String folder = context.getFilesDir().getAbsolutePath();
-        Log.d("debug", folder);
+//        File input = new File(Environment.getExternalStorageDirectory(), "Download/in-pipe.txt");
+//        File output = new File(Environment.getExternalStorageDirectory(), "Download/out-pipe.txt");
+//        input.createNewFile();
+//        output.createNewFile();
+    }
 
-        Files.write(Paths.get(folder + "/wiki_image/in-pipe.txt"), title.getBytes());
+    private void microserviceInput(String title) throws IOException {
+        File myFile = new File(Environment.getExternalStorageDirectory(), "Download/in-pipe.txt");
+        FileOutputStream fOut = new FileOutputStream(myFile);
 
+        OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+
+        myOutWriter.append(title);
+        myOutWriter.close();
+        fOut.close();
+    }
+
+    private String microserviceOutput() throws IOException {
+        File myFile = new File(Environment.getExternalStorageDirectory(), "Download/out-pipe.txt");
+        myFile.createNewFile();
+        FileInputStream fIn = new FileInputStream(myFile);
+        BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+
+        String wiki = myReader.readLine();
+
+        myReader.close();
+        return wiki;
     }
 }
