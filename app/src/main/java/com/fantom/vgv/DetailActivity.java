@@ -61,9 +61,9 @@ public class DetailActivity extends YouTubeBaseActivity {
         tvOverview.setText(game.getOverview());
         ratingBar.setRating((float) game.getRating());
 
-        // create microservice text files
+        // get file permissions
         try {
-            createMicroserviceFiles();
+            getFilePermissions();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -124,17 +124,13 @@ public class DetailActivity extends YouTubeBaseActivity {
         });
     }
 
-    private void createMicroserviceFiles() throws IOException {
+    private void getFilePermissions() throws IOException {
         if (ActivityCompat.shouldShowRequestPermissionRationale(DetailActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Toast.makeText(DetailActivity.this, "Write External Storage permission allows us to create files. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
             ActivityCompat.requestPermissions(DetailActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
         }
 
-//        File input = new File(Environment.getExternalStorageDirectory(), "Download/in-pipe.txt");
-//        File output = new File(Environment.getExternalStorageDirectory(), "Download/out-pipe.txt");
-//        input.createNewFile();
-//        output.createNewFile();
     }
 
     private void microserviceInput(String title) throws IOException {
