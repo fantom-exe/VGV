@@ -53,6 +53,9 @@
         android:id="@+id/tvWiki"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:linksClickable="true"
         android:textAlignment="center"
+        android:textColorLink="#1976D2"
         android:textSize="18sp" />
 </LinearLayout>
