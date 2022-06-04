@@ -16,7 +16,6 @@ public class Game {
     String overview;
     double rating;
 
-    // empty constructor needed by Parceler library
     public Game() {
 
     }

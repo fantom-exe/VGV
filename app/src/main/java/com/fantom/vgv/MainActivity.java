@@ -35,13 +35,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView rvMovies = findViewById(R.id.rvMovies);
         games = new ArrayList<>();
 
-        // create adapter
         final GameAdapter gameAdapter = new GameAdapter(this, games);
-
-        // set adapter on recycler view
         rvMovies.setAdapter(gameAdapter);
-
-        // set layout manager on recycler view
         rvMovies.setLayoutManager(new LinearLayoutManager(this));
 
         AsyncHttpClient client = new AsyncHttpClient();

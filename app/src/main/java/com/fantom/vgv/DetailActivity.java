@@ -60,7 +60,6 @@ public class DetailActivity extends YouTubeBaseActivity {
         tvOverview.setText(game.getOverview());
         ratingBar.setRating((float) game.getRating());
 
-        // get file permissions
         try {
             getFilePermissions();
         } catch (IOException e) {
